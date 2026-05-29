@@ -6,6 +6,8 @@ import {
   FaCoins,
   FaCheck,
   FaSpinner,
+  FaArrowRight,
+  FaGoogle,
   FaCheckCircle,
   FaTimesCircle,
 } from "react-icons/fa";
@@ -15,66 +17,90 @@ const PLANS = [
     id: "basic",
     name: "Basic Pack",
     credits: 1000,
-    price: 5,
+    price: "$5",
     generations: 55,
-    description: "Perfect for trying out ClearMark AI",
-    highlight: false,
+    desc: "Perfect for trying out ClearMark AI",
+    features: [
+      "~55 Watermark Removals",
+      "High-Resolution Output (2K/4K)",
+      "Standard Processing Speed",
+      "Personal Studio Gallery",
+      "Secure Checkout via Stripe",
+    ],
   },
   {
     id: "standard",
     name: "Standard Pack",
     credits: 2000,
-    price: 10,
+    price: "$10",
     generations: 111,
-    description: "Great for regular watermark removal",
-    highlight: false,
+    desc: "Great for regular watermark removal",
+    features: [
+      "~111 Watermark Removals",
+      "High-Resolution Output (2K/4K)",
+      "Priority Processing Speed",
+      "Personal Studio Gallery",
+      "Secure Checkout via Stripe",
+    ],
   },
   {
     id: "pro",
     name: "Professional Pack",
     credits: 4000,
-    price: 20,
+    price: "$20",
     generations: 222,
-    description: "Best value for power users",
-    highlight: true,
+    desc: "Best value for power users",
+    popular: true,
+    features: [
+      "~222 Watermark Removals",
+      "High-Resolution Output (2K/4K)",
+      "Priority Processing Speed",
+      "Personal Studio Gallery",
+      "Premium Direct Email Support",
+      "Secure Checkout via Stripe",
+    ],
   },
   {
     id: "business",
     name: "Business Pack",
     credits: 10000,
-    price: 50,
+    price: "$50",
     generations: 555,
-    description: "High-volume batch processing",
-    highlight: false,
+    desc: "High-volume batch processing",
+    features: [
+      "~555 Watermark Removals",
+      "Commercial Usage License",
+      "Instant Cloud Processing Speeds",
+      "Priority 24/7 Dedicated Support",
+      "Batch Image Processing",
+      "Secure Checkout via Stripe",
+    ],
   },
-];
-
-const FEATURES = [
-  "Remove watermarks, logos & text overlays",
-  "Restore old & damaged photographs",
-  "Clean documents & scanned receipts",
-  "2K / 4K high-resolution output",
-  "GPT Image 2 powered reconstruction",
-  "Personal gallery with HD downloads",
 ];
 
 export default function PricingPage() {
   const { data: session } = useSession();
   const [loadingPlan, setLoadingPlan] = useState(null);
-  const [toast, setToast] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [canceled, setCanceled] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("success") === "true") {
-      setToast({ type: "success", message: "Payment successful! Credits added to your account." });
-    } else if (params.get("canceled") === "true") {
-      setToast({ type: "error", message: "Payment canceled. No credits were charged." });
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("success") === "true") {
+        setSuccess(true);
+      }
+      if (params.get("canceled") === "true") {
+        setCanceled(true);
+      }
     }
-    if (toast) setTimeout(() => setToast(null), 5000);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const handlePurchase = async (planId) => {
-    if (!session?.user) { signIn("google"); return; }
+    if (!session?.user) {
+      signIn("google");
+      return;
+    }
     setLoadingPlan(planId);
     try {
       const res = await fetch("/api/stripe/checkout", {
@@ -82,11 +108,12 @@ export default function PricingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ planId }),
       });
-      if (!res.ok) throw new Error("Checkout failed");
-      const { url } = await res.json();
-      window.location.href = url;
-    } catch {
-      setToast({ type: "error", message: "Could not start checkout. Please try again." });
+      if (res.ok) {
+        const d = await res.json();
+        if (d.url) window.location.href = d.url;
+      }
+    } catch (e) {
+      console.error(e);
     } finally {
       setLoadingPlan(null);
     }
@@ -94,98 +121,129 @@ export default function PricingPage() {
 
   return (
     <div className="flex-1 overflow-y-auto bg-zinc-950 py-12 px-4 sm:px-6 lg:px-8 font-sans">
-      {/* Toast */}
-      {toast && (
-        <div
-          className={`fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-5 py-3 rounded-xl border shadow-2xl text-xs font-semibold ${
-            toast.type === "success"
-              ? "bg-emerald-900/80 border-emerald-500/40 text-emerald-200"
-              : "bg-red-900/80 border-red-500/40 text-red-200"
-          }`}
-        >
-          {toast.type === "success" ? <FaCheckCircle /> : <FaTimesCircle />}
-          {toast.message}
-        </div>
-      )}
-
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-[11px] font-bold px-3 py-1.5 rounded-full mb-5">
-            <FaCoins className="text-amber-400" />
-            $1 = 200 Credits · 18 Credits per Removal
-          </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">
-            Credit Packs
+        {/* Header Block */}
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <span className="text-[10px] font-black uppercase tracking-wider text-indigo-400 bg-indigo-950/40 border border-indigo-700 px-3.5 py-1.5 rounded-full shadow-sm">
+            Credit Packages
+          </span>
+          <h1 className="text-3xl font-black font-heading text-white tracking-tight mt-4">
+            Simple, Transparent Watermark Removal Pricing
           </h1>
-          <p className="text-sm text-zinc-400 mt-3 max-w-md mx-auto leading-relaxed">
-            One-time purchase. No subscriptions. Use credits at your own pace across all ClearMark AI features.
+          <p className="text-sm text-zinc-300 mt-2 font-medium">
+            Buy one-time credits. No monthly subscriptions, use them whenever you need. Each watermark removal costs{" "}
+            <strong className="text-indigo-400">18 credits</strong>.
           </p>
         </div>
 
-        {/* Plans Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
-          {PLANS.map((plan) => (
-            <div
-              key={plan.id}
-              className={`relative rounded-2xl border flex flex-col overflow-hidden transition-all ${
-                plan.highlight
-                  ? "bg-gradient-to-b from-indigo-600/20 to-violet-600/10 border-indigo-500/50 shadow-2xl shadow-indigo-500/10"
-                  : "bg-zinc-900 border-zinc-800 hover:border-zinc-700"
-              }`}
+        {/* Transaction Success Alert */}
+        {success && (
+          <div className="bg-emerald-950/20 border border-emerald-900/40 rounded-2xl p-6 mb-8 text-center max-w-xl mx-auto shadow-lg animate-in fade-in zoom-in duration-200">
+            <div className="h-10 w-10 bg-emerald-500 rounded-full flex items-center justify-center text-white mx-auto mb-3 shadow-lg">
+              <FaCheck className="text-sm" />
+            </div>
+            <h3 className="text-sm font-bold text-emerald-300">Purchase Successful!</h3>
+            <p className="text-xs text-emerald-300/80 leading-relaxed mt-1 max-w-sm mx-auto">
+              Your credits have been added successfully to your account. Return to the studio to start removing watermarks!
+            </p>
+            <button
+              onClick={() => (window.location.href = "/")}
+              className="mt-4 inline-flex items-center gap-1.5 px-4.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition-all cursor-pointer shadow-md hover:scale-[1.02]"
             >
-              {plan.highlight && (
-                <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-[10px] font-bold text-center py-1.5 tracking-wider uppercase">
-                  Most Popular
-                </div>
-              )}
-              <div className={`flex flex-col gap-4 p-6 flex-1 ${plan.highlight ? "pt-8" : ""}`}>
+              Go to Studio <FaArrowRight className="text-[9px]" />
+            </button>
+          </div>
+        )}
+
+        {/* Transaction Canceled Alert */}
+        {canceled && (
+          <div className="bg-amber-955/20 border border-amber-900/40 rounded-2xl p-4 mb-8 text-center max-w-xl mx-auto shadow-lg animate-in fade-in zoom-in duration-200">
+            <h3 className="text-sm font-bold text-amber-300 font-heading">Transaction Canceled</h3>
+            <p className="text-xs text-amber-200 mt-1 font-medium">
+              The Stripe checkout session was canceled. No charges were made to your account.
+            </p>
+          </div>
+        )}
+
+        {/* Tiers Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch mb-12">
+          {PLANS.map((plan) => {
+            const isLoading = loadingPlan === plan.id;
+            return (
+              <div
+                key={plan.id}
+                className={`bg-zinc-900 border rounded-2xl overflow-hidden p-6 flex flex-col justify-between shadow-lg transition-all hover:border-zinc-500 hover:scale-[1.01] relative ${
+                  plan.popular
+                    ? "border-indigo-500 ring-2 ring-indigo-500/10 scale-[1.02] z-10"
+                    : "border-zinc-700"
+                }`}
+              >
+                {/* Popular Badge */}
+                {plan.popular && (
+                  <span className="absolute top-3 right-3 text-[9px] font-bold uppercase tracking-wider text-indigo-400 bg-indigo-955 border border-indigo-750 px-2.5 py-0.5 rounded shadow">
+                    Most Popular
+                  </span>
+                )}
+
                 <div>
-                  <h3 className="text-sm font-bold text-zinc-100">{plan.name}</h3>
-                  <p className="text-[11px] text-zinc-500 mt-0.5">{plan.description}</p>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-white">${plan.price}</div>
-                  <div className="text-[11px] text-zinc-500 mt-1">
-                    {plan.credits.toLocaleString()} credits · ~{plan.generations} removals
+                  <h3 className="text-sm font-black font-heading text-white uppercase tracking-wider">
+                    {plan.name}
+                  </h3>
+                  <p className="text-[11px] text-zinc-300 font-bold mt-1.5 leading-snug">
+                    {plan.desc}
+                  </p>
+
+                  {/* Big price display */}
+                  <div className="flex items-baseline gap-1 my-5">
+                    <span className="text-3xl font-black text-white font-heading">
+                      {plan.price}
+                    </span>
+                    <span className="text-xs text-zinc-400 font-bold">one-time</span>
                   </div>
+
+                  {/* Feature lists */}
+                  <ul className="space-y-2.5 text-xs text-zinc-200 mb-6 font-medium">
+                    <li className="flex items-center gap-2 text-indigo-300 font-bold bg-indigo-950/40 border border-indigo-900/50 px-2.5 py-1.5 rounded-lg mb-4">
+                      <FaCoins className="text-amber-450 text-xs animate-pulse" />
+                      <span>{plan.credits.toLocaleString()} Credits</span>
+                    </li>
+
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-2 leading-relaxed">
+                        <FaCheck className="text-indigo-400 text-[10px] flex-shrink-0 mt-1" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+
+                {/* Buy Button */}
                 <button
                   onClick={() => handlePurchase(plan.id)}
-                  disabled={loadingPlan === plan.id}
-                  className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-bold transition-all cursor-pointer mt-auto disabled:opacity-50 ${
-                    plan.highlight
-                      ? "bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white shadow-lg shadow-indigo-500/20"
-                      : "bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700"
+                  disabled={isLoading}
+                  className={`w-full py-3 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md ${
+                    plan.popular
+                      ? "bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white shadow-indigo-500/10 hover:scale-[1.01]"
+                      : "bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white border border-zinc-700"
                   }`}
                 >
-                  {loadingPlan === plan.id ? (
-                    <><FaSpinner className="animate-spin" /> Processing...</>
+                  {isLoading ? (
+                    <FaSpinner className="animate-spin text-xs text-white" />
+                  ) : !session?.user ? (
+                    <>
+                      <FaGoogle className="text-[10px]" />
+                      <span>Sign in to Purchase</span>
+                    </>
                   ) : (
-                    `Get ${plan.credits.toLocaleString()} Credits`
+                    <span>Get {plan.credits.toLocaleString()} Credits</span>
                   )}
                 </button>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* Features */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
-          <h3 className="text-sm font-bold text-zinc-100 mb-5 text-center">All Plans Include</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {FEATURES.map((f) => (
-              <div key={f} className="flex items-start gap-3">
-                <div className="h-5 w-5 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <FaCheck className="text-[9px] text-indigo-400" />
-                </div>
-                <span className="text-xs text-zinc-400">{f}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <p className="text-center text-[11px] text-zinc-600 mt-6">
+        <p className="text-center text-[11px] text-zinc-500">
           Credits never expire · Secure payment via Stripe · No recurring charges
         </p>
       </div>
