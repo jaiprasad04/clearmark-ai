@@ -1,9 +1,9 @@
-# 🧹 ClearMark AI — AI Watermark Remover SaaS
+# 🧹 ClearMark AI — Open-Source AI Watermark Remover SaaS (Free Watermarkremover.io / HitPaw Alternative)
 
-> **Remove watermarks, logos, stamps, and text overlays from images in seconds using GPT Image 2.** A production-ready, self-hostable Next.js SaaS built for photographers, designers, content creators, and businesses. Powered by OpenAI's GPT Image 2 via the MuAPI inference layer.
+> **Remove watermarks, logos, stamps, and text overlays from images in seconds with AI.** A production-ready, self-hostable Next.js SaaS boilerplate built for photographers, designers, and content creators — powered by GPT Image 2 via the MuAPI inference layer. A free open-source alternative to Watermarkremover.io, HitPaw, and Inpaint.
 
-**Tech stack:** Next.js 16 (App Router) · Prisma · PostgreSQL · NextAuth (Google OAuth) · Stripe · Tailwind CSS · MuAPI (gpt-image-2-image-to-image) · Webhook-backed async delivery  
-**Use cases:** Stock photo cleanup · Document digitization · Old photo restoration · Product image cleaning · Receipt & certificate processing
+**Tech stack:** Next.js 14 (App Router) · Prisma · PostgreSQL · NextAuth (Google OAuth) · Stripe · Tailwind CSS · MuAPI GPT-Image-2 · Webhook-backed async delivery
+**Use cases:** Stock photo cleanup · Product image cleaning · Old photo restoration · Document digitization · Photography agencies · Content creator tools · E-commerce listing photos · Print-ready image prep
 
 ![ClearMark AI Interface](https://cdn.muapi.ai/data/2/345929059902/Screenshot_2026-05-29_132025.png)
 
