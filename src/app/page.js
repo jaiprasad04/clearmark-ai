@@ -264,11 +264,11 @@ export default function StudioPage() {
       <div className="flex-1 flex flex-col md:flex-row overflow-y-auto md:overflow-hidden p-4 sm:p-6 gap-5 min-h-0">
 
         {/* ── Left Input Panel ── */}
-        <div className="w-full md:w-[44%] flex flex-col gap-4 md:overflow-y-auto pr-0 md:pr-2 min-h-0 flex-shrink-0">
+        <div className="w-full md:w-[30%] flex flex-col gap-4 md:overflow-y-auto pr-0 md:pr-2 min-h-0 flex-shrink-0">
 
           {/* Guest Banner */}
           {!session?.user && (
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex gap-3 items-start">
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded p-4 flex gap-3 items-start">
               <FaExclamationTriangle className="text-amber-400 text-base flex-shrink-0 mt-0.5" />
               <div>
                 <h4 className="text-xs font-bold text-amber-300">Playing as Guest</h4>
@@ -290,18 +290,18 @@ export default function StudioPage() {
           </div>
 
           {/* Image Upload */}
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex flex-col gap-4">
+          <div className="bg-zinc-900 border border-zinc-800 rounded p-5 flex flex-col gap-4">
             <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider">
               Upload Image
             </h3>
 
             {inputPreview ? (
-              <div className="relative rounded-lg overflow-hidden border border-zinc-700 bg-zinc-800 group">
+              <div className="relative aspect-video rounded overflow-hidden border border-zinc-700 bg-zinc-800 group">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={inputPreview}
                   alt="Input image"
-                  className="w-full max-h-56 object-contain"
+                  className="w-full h-full object-cover"
                 />
                 <button
                   onClick={handleRemoveImage}
@@ -317,7 +317,7 @@ export default function StudioPage() {
                 )}
               </div>
             ) : (
-              <label className="border-2 border-dashed border-zinc-700 hover:border-indigo-500/60 rounded-xl flex flex-col items-center justify-center p-10 text-center cursor-pointer transition-colors group relative">
+              <label className="border-2 border-dashed border-zinc-700 hover:border-indigo-500/60 rounded flex flex-col items-center justify-center p-10 text-center cursor-pointer transition-colors group relative">
                 <input
                   type="file"
                   accept="image/*"
@@ -332,7 +332,7 @@ export default function StudioPage() {
                   </>
                 ) : (
                   <>
-                    <div className="h-14 w-14 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                    <div className="h-14 w-14 rounded bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                       <FaUpload className="text-xl text-indigo-400" />
                     </div>
                     <span className="text-sm font-semibold text-zinc-200">Drop image here</span>
@@ -346,7 +346,7 @@ export default function StudioPage() {
           </div>
 
           {/* Scenario Selector */}
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex flex-col gap-3">
+          <div className="bg-zinc-900 border border-zinc-800 rounded p-5 flex flex-col gap-3">
             <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider">
               Choose Scenario
             </h3>
@@ -359,7 +359,7 @@ export default function StudioPage() {
                   <button
                     key={s.id}
                     onClick={() => handleSelectScenario(s.id)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg border text-left transition-all cursor-pointer ${
+                    className={`flex items-center gap-3 px-4 py-3 rounded border text-left transition-all cursor-pointer ${
                       active ? c.active : c.chip
                     }`}
                   >
@@ -378,7 +378,7 @@ export default function StudioPage() {
           </div>
 
           {/* Prompt Editor */}
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex flex-col gap-3">
+          <div className="bg-zinc-900 border border-zinc-800 rounded p-5 flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider">
                 AI Prompt
@@ -390,12 +390,12 @@ export default function StudioPage() {
               onChange={(e) => setCustomPrompt(e.target.value)}
               rows={5}
               placeholder="Describe what you want AI to do with your image..."
-              className="w-full text-xs text-zinc-300 bg-zinc-950 border border-zinc-700 focus:border-indigo-500 rounded-lg p-3.5 outline-none resize-none transition-all leading-relaxed"
+              className="w-full text-xs text-zinc-300 bg-zinc-950 border border-zinc-700 focus:border-indigo-500 rounded p-3.5 outline-none resize-none transition-all leading-relaxed"
             />
           </div>
 
           {/* Advanced Options */}
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+          <div className="bg-zinc-900 border border-zinc-800 rounded overflow-hidden">
             <button
               onClick={() => setShowAdvanced((v) => !v)}
               className="w-full flex items-center justify-between px-5 py-3.5 text-xs font-bold text-zinc-300 hover:text-white transition-colors cursor-pointer"
@@ -411,7 +411,7 @@ export default function StudioPage() {
                   <select
                     value={aspectRatio}
                     onChange={(e) => setAspectRatio(e.target.value)}
-                    className="text-xs text-zinc-200 bg-zinc-950 border border-zinc-700 rounded-lg px-2.5 py-2 outline-none cursor-pointer"
+                    className="text-xs text-zinc-200 bg-zinc-950 border border-zinc-700 rounded px-2.5 py-2 outline-none cursor-pointer"
                   >
                     {["auto", "1:1", "16:9", "9:16", "4:3", "3:4"].map((r) => (
                       <option key={r} value={r}>{r}</option>
@@ -424,7 +424,7 @@ export default function StudioPage() {
                   <select
                     value={resolution}
                     onChange={(e) => setResolution(e.target.value)}
-                    className="text-xs text-zinc-200 bg-zinc-950 border border-zinc-700 rounded-lg px-2.5 py-2 outline-none cursor-pointer"
+                    className="text-xs text-zinc-200 bg-zinc-950 border border-zinc-700 rounded px-2.5 py-2 outline-none cursor-pointer"
                   >
                     {["1K", "2K", "4K"].map((r) => (
                       <option key={r} value={r}>{r}</option>
@@ -437,7 +437,7 @@ export default function StudioPage() {
                   <select
                     value={quality}
                     onChange={(e) => setQuality(e.target.value)}
-                    className="text-xs text-zinc-200 bg-zinc-950 border border-zinc-700 rounded-lg px-2.5 py-2 outline-none cursor-pointer"
+                    className="text-xs text-zinc-200 bg-zinc-950 border border-zinc-700 rounded px-2.5 py-2 outline-none cursor-pointer"
                   >
                     {["low", "medium", "high"].map((q) => (
                       <option key={q} value={q}>{q}</option>
@@ -452,7 +452,7 @@ export default function StudioPage() {
           <button
             onClick={handleGenerate}
             disabled={generatingStatus === "generating" || isUploading || !inputImage}
-            className="w-full flex items-center justify-center gap-2.5 py-4 text-sm font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl shadow-lg shadow-indigo-500/20 transition-all cursor-pointer"
+            className="w-full flex items-center justify-center gap-2.5 py-4 text-sm font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed rounded shadow-lg shadow-indigo-500/20 transition-all cursor-pointer"
           >
             {generatingStatus === "generating" ? (
               <>
@@ -468,7 +468,7 @@ export default function StudioPage() {
           </button>
 
           {generatingError && (
-            <div className="flex items-start gap-2.5 bg-red-500/10 border border-red-500/30 rounded-xl p-3.5">
+            <div className="flex items-start gap-2.5 bg-red-500/10 border border-red-500/30 rounded p-3.5">
               <FaTimesCircle className="text-red-400 flex-shrink-0 mt-0.5" />
               <p className="text-xs text-red-300 font-medium leading-relaxed">{generatingError}</p>
             </div>
@@ -476,7 +476,7 @@ export default function StudioPage() {
         </div>
 
         {/* ── Right Output Panel ── */}
-        <div className="w-full md:w-[56%] flex flex-col bg-zinc-900 border border-zinc-800 rounded-xl p-5 shadow-2xl relative min-h-[400px] md:h-full overflow-hidden flex-shrink-0">
+        <div className="w-full md:w-[70%] flex flex-col bg-zinc-900 border border-zinc-800 rounded p-5 shadow-2xl relative min-h-[400px] md:h-full overflow-hidden flex-shrink-0">
           {/* Panel Header */}
           <div className="flex items-center justify-between border-b border-zinc-800 pb-3.5 mb-4 flex-shrink-0">
             <div>
@@ -500,12 +500,12 @@ export default function StudioPage() {
               )}
               {/* Compare toggle */}
               {resultImage && inputPreview && (
-                <div className="flex bg-zinc-800 rounded-lg p-0.5 border border-zinc-700">
+                <div className="flex bg-zinc-800 rounded p-0.5 border border-zinc-700">
                   {["original", "result"].map((m) => (
                     <button
                       key={m}
                       onClick={() => setCompareMode(m)}
-                      className={`text-[10px] font-semibold px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                      className={`text-[10px] font-semibold px-2.5 py-1 rounded transition-all cursor-pointer ${
                         compareMode === m
                           ? "bg-indigo-600 text-white shadow"
                           : "text-zinc-400 hover:text-zinc-200"
@@ -520,14 +520,14 @@ export default function StudioPage() {
           </div>
 
           {/* Display Area */}
-          <div className="flex-1 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 flex flex-col items-center justify-center relative min-h-[200px]">
+          <div className="flex-1 rounded overflow-hidden border border-zinc-800 bg-zinc-950 flex flex-col items-center justify-center relative min-h-[200px]">
             {resultImage && compareMode === "result" ? (
               <div className="w-full h-full flex items-center justify-center p-2">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={resultImage}
                   alt="Watermark Removed Result"
-                  className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+                  className="max-w-full max-h-full object-contain rounded shadow-2xl"
                 />
               </div>
             ) : inputPreview && (compareMode === "original" || !resultImage) ? (
@@ -536,7 +536,7 @@ export default function StudioPage() {
                 <img
                   src={inputPreview}
                   alt="Original Image"
-                  className="max-w-full max-h-full object-contain rounded-lg opacity-80"
+                  className="max-w-full max-h-full object-contain rounded opacity-80"
                 />
                 {!resultImage && (
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-zinc-900/90 border border-zinc-700 rounded-full px-4 py-1.5 text-[10px] text-zinc-400 font-medium whitespace-nowrap">
@@ -547,7 +547,7 @@ export default function StudioPage() {
             ) : generatingStatus === "generating" ? (
               <div className="text-center max-w-xs px-6">
                 <div className="relative mx-auto w-20 h-20 mb-6">
-                  <div className="absolute inset-0 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
+                  <div className="absolute inset-0 rounded bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
                     <FaSpinner className="animate-spin text-3xl text-indigo-400" />
                   </div>
                   <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-violet-600 flex items-center justify-center">
@@ -565,7 +565,7 @@ export default function StudioPage() {
               </div>
             ) : (
               <div className="text-center max-w-xs px-6 py-10">
-                <div className="h-20 w-20 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto mb-5">
+                <div className="h-20 w-20 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto mb-5">
                   <FaEraser className="text-3xl text-zinc-600" />
                 </div>
                 <h4 className="text-sm font-bold text-zinc-300">Ready to Remove</h4>
@@ -581,14 +581,14 @@ export default function StudioPage() {
             <div className="flex gap-3 mt-4 border-t border-zinc-800 pt-4 flex-shrink-0">
               <button
                 onClick={handleDownload}
-                className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white rounded-xl text-xs font-bold shadow-lg shadow-indigo-500/20 cursor-pointer transition-all"
+                className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white rounded text-xs font-bold shadow-lg shadow-indigo-500/20 cursor-pointer transition-all"
               >
                 <FaDownload />
                 <span>Download HD Result</span>
               </button>
               <button
                 onClick={handleDelete}
-                className="px-4 py-3 bg-zinc-800 hover:bg-red-900/30 hover:text-red-400 border border-zinc-700 hover:border-red-500/30 text-zinc-400 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                className="px-4 py-3 bg-zinc-800 hover:bg-red-900/30 hover:text-red-400 border border-zinc-700 hover:border-red-500/30 text-zinc-400 rounded text-xs font-bold transition-all cursor-pointer"
                 title="Delete result"
               >
                 <FaTrashAlt />
