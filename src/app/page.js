@@ -94,7 +94,7 @@ export default function StudioPage() {
   useEffect(() => {
     if (typeof window !== "undefined" && session?.user) {
       fetch("/api/creations")
-        .then((r) => r.ok ? r.json() : null)
+        .then((r) => (r.ok ? r.json() : null))
         .then((list) => {
           if (Array.isArray(list) && list.length > 0) {
             const last = list[0];
@@ -113,7 +113,10 @@ export default function StudioPage() {
   // Timer
   useEffect(() => {
     if (generatingStatus === "generating") {
-      timerRef.current = setInterval(() => setElapsedSeconds((p) => p + 1), 1000);
+      timerRef.current = setInterval(
+        () => setElapsedSeconds((p) => p + 1),
+        1000,
+      );
     } else {
       clearInterval(timerRef.current);
     }
@@ -181,7 +184,9 @@ export default function StudioPage() {
       setInputPreview("");
     } finally {
       setIsUploading(false);
-      try { e.target.value = ""; } catch {}
+      try {
+        e.target.value = "";
+      } catch {}
     }
   };
 
@@ -195,7 +200,10 @@ export default function StudioPage() {
   };
 
   const handleGenerate = async () => {
-    if (!session?.user) { signIn("google"); return; }
+    if (!session?.user) {
+      signIn("google");
+      return;
+    }
     if (!inputImage) {
       setGeneratingError("Please upload an image first.");
       setGeneratingStatus("error");
@@ -211,11 +219,19 @@ export default function StudioPage() {
       const res = await fetch("/api/generation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageUrl: inputImage, prompt: customPrompt, aspectRatio, resolution, quality }),
+        body: JSON.stringify({
+          imageUrl: inputImage,
+          prompt: customPrompt,
+          aspectRatio,
+          resolution,
+          quality,
+        }),
       });
 
       if (res.status === 402) {
-        setGeneratingError("Insufficient credits. Please purchase a credit pack.");
+        setGeneratingError(
+          "Insufficient credits. Please purchase a credit pack.",
+        );
         setGeneratingStatus("error");
         return;
       }
@@ -262,18 +278,19 @@ export default function StudioPage() {
   return (
     <div className="flex-1 flex overflow-hidden relative bg-zinc-950 font-sans">
       <div className="flex-1 flex flex-col md:flex-row overflow-y-auto md:overflow-hidden p-4 sm:p-6 gap-5 min-h-0">
-
         {/* ── Left Input Panel ── */}
         <div className="w-full md:w-[30%] flex flex-col gap-4 md:overflow-y-auto pr-0 md:pr-2 min-h-0 flex-shrink-0">
-
           {/* Guest Banner */}
           {!session?.user && (
             <div className="bg-amber-500/10 border border-amber-500/30 rounded p-4 flex gap-3 items-start">
               <FaExclamationTriangle className="text-amber-400 text-base flex-shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-xs font-bold text-amber-300">Playing as Guest</h4>
+                <h4 className="text-xs font-bold text-amber-300">
+                  Playing as Guest
+                </h4>
                 <p className="text-[11px] text-amber-400/80 mt-0.5 leading-relaxed">
-                  Sign in with Google to upload images, remove watermarks, and save results.
+                  Sign in with Google to upload images, remove watermarks, and
+                  save results.
                 </p>
               </div>
             </div>
@@ -285,7 +302,8 @@ export default function StudioPage() {
               Remove Watermarks with AI
             </h1>
             <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
-              Upload your image, choose a scenario, and let GPT Image 2 clean it instantly.
+              Upload your image, choose a scenario, and let GPT Image 2 clean it
+              instantly.
             </p>
           </div>
 
@@ -328,14 +346,18 @@ export default function StudioPage() {
                 {isUploading ? (
                   <>
                     <FaSpinner className="animate-spin text-3xl text-indigo-400 mb-3" />
-                    <span className="text-xs font-semibold text-zinc-300">Uploading to CDN...</span>
+                    <span className="text-xs font-semibold text-zinc-300">
+                      Uploading to CDN...
+                    </span>
                   </>
                 ) : (
                   <>
                     <div className="h-14 w-14 rounded bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                       <FaUpload className="text-xl text-indigo-400" />
                     </div>
-                    <span className="text-sm font-semibold text-zinc-200">Drop image here</span>
+                    <span className="text-sm font-semibold text-zinc-200">
+                      Drop image here
+                    </span>
                     <span className="text-[11px] text-zinc-500 mt-1.5">
                       or click to browse — JPG, PNG, WebP
                     </span>
@@ -366,10 +388,14 @@ export default function StudioPage() {
                     <Icon className={`text-sm flex-shrink-0 ${c.icon}`} />
                     <div>
                       <div className="text-xs font-bold">{s.label}</div>
-                      <div className="text-[10px] opacity-70 mt-0.5">{s.description}</div>
+                      <div className="text-[10px] opacity-70 mt-0.5">
+                        {s.description}
+                      </div>
                     </div>
                     {active && (
-                      <FaCheckCircle className={`ml-auto text-sm flex-shrink-0 ${c.icon}`} />
+                      <FaCheckCircle
+                        className={`ml-auto text-sm flex-shrink-0 ${c.icon}`}
+                      />
                     )}
                   </button>
                 );
@@ -383,7 +409,9 @@ export default function StudioPage() {
               <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider">
                 AI Prompt
               </h3>
-              <span className="text-[9px] text-zinc-500 font-medium">Editable</span>
+              <span className="text-[9px] text-zinc-500 font-medium">
+                Editable
+              </span>
             </div>
             <textarea
               value={customPrompt}
@@ -401,46 +429,62 @@ export default function StudioPage() {
               className="w-full flex items-center justify-between px-5 py-3.5 text-xs font-bold text-zinc-300 hover:text-white transition-colors cursor-pointer"
             >
               <span className="uppercase tracking-wider">Advanced Options</span>
-              {showAdvanced ? <FaChevronUp className="text-xs" /> : <FaChevronDown className="text-xs" />}
+              {showAdvanced ? (
+                <FaChevronUp className="text-xs" />
+              ) : (
+                <FaChevronDown className="text-xs" />
+              )}
             </button>
             {showAdvanced && (
               <div className="px-5 pb-5 grid grid-cols-3 gap-3">
                 {/* Aspect Ratio */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Aspect</label>
+                  <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
+                    Aspect
+                  </label>
                   <select
                     value={aspectRatio}
                     onChange={(e) => setAspectRatio(e.target.value)}
                     className="text-xs text-zinc-200 bg-zinc-950 border border-zinc-700 rounded px-2.5 py-2 outline-none cursor-pointer"
                   >
                     {["auto", "1:1", "16:9", "9:16", "4:3", "3:4"].map((r) => (
-                      <option key={r} value={r}>{r}</option>
+                      <option key={r} value={r}>
+                        {r}
+                      </option>
                     ))}
                   </select>
                 </div>
                 {/* Resolution */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Resolution</label>
+                  <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
+                    Resolution
+                  </label>
                   <select
                     value={resolution}
                     onChange={(e) => setResolution(e.target.value)}
                     className="text-xs text-zinc-200 bg-zinc-950 border border-zinc-700 rounded px-2.5 py-2 outline-none cursor-pointer"
                   >
                     {["1K", "2K", "4K"].map((r) => (
-                      <option key={r} value={r}>{r}</option>
+                      <option key={r} value={r}>
+                        {r}
+                      </option>
                     ))}
                   </select>
                 </div>
                 {/* Quality */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Quality</label>
+                  <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
+                    Quality
+                  </label>
                   <select
                     value={quality}
                     onChange={(e) => setQuality(e.target.value)}
                     className="text-xs text-zinc-200 bg-zinc-950 border border-zinc-700 rounded px-2.5 py-2 outline-none cursor-pointer"
                   >
                     {["low", "medium", "high"].map((q) => (
-                      <option key={q} value={q}>{q}</option>
+                      <option key={q} value={q}>
+                        {q}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -451,7 +495,9 @@ export default function StudioPage() {
           {/* Generate Button */}
           <button
             onClick={handleGenerate}
-            disabled={generatingStatus === "generating" || isUploading || !inputImage}
+            disabled={
+              generatingStatus === "generating" || isUploading || !inputImage
+            }
             className="w-full flex items-center justify-center gap-2.5 py-4 text-sm font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed rounded shadow-lg shadow-indigo-500/20 transition-all cursor-pointer"
           >
             {generatingStatus === "generating" ? (
@@ -470,7 +516,9 @@ export default function StudioPage() {
           {generatingError && (
             <div className="flex items-start gap-2.5 bg-red-500/10 border border-red-500/30 rounded p-3.5">
               <FaTimesCircle className="text-red-400 flex-shrink-0 mt-0.5" />
-              <p className="text-xs text-red-300 font-medium leading-relaxed">{generatingError}</p>
+              <p className="text-xs text-red-300 font-medium leading-relaxed">
+                {generatingError}
+              </p>
             </div>
           )}
         </div>
@@ -480,7 +528,9 @@ export default function StudioPage() {
           {/* Panel Header */}
           <div className="flex items-center justify-between border-b border-zinc-800 pb-3.5 mb-4 flex-shrink-0">
             <div>
-              <h3 className="text-sm font-bold text-zinc-100">Result Preview</h3>
+              <h3 className="text-sm font-bold text-zinc-100">
+                Result Preview
+              </h3>
               <p className="text-[10px] text-zinc-500 font-medium mt-0.5">
                 Before / After comparison
               </p>
@@ -554,13 +604,17 @@ export default function StudioPage() {
                     <FaMagic className="text-[8px] text-white" />
                   </div>
                 </div>
-                <h4 className="text-sm font-bold text-zinc-100">Removing Watermark...</h4>
+                <h4 className="text-sm font-bold text-zinc-100">
+                  Removing Watermark...
+                </h4>
                 <p className="text-[11px] text-zinc-500 mt-2 leading-relaxed">
                   GPT Image 2 is analyzing and reconstructing your image.
                 </p>
                 <div className="mt-4 inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full px-4 py-1.5">
                   <FaSpinner className="animate-spin text-[10px] text-indigo-400" />
-                  <span className="text-[10px] font-bold text-indigo-300">{elapsedSeconds}s elapsed</span>
+                  <span className="text-[10px] font-bold text-indigo-300">
+                    {elapsedSeconds}s elapsed
+                  </span>
                 </div>
               </div>
             ) : (
@@ -568,9 +622,12 @@ export default function StudioPage() {
                 <div className="h-20 w-20 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto mb-5">
                   <FaEraser className="text-3xl text-zinc-600" />
                 </div>
-                <h4 className="text-sm font-bold text-zinc-300">Ready to Remove</h4>
+                <h4 className="text-sm font-bold text-zinc-300">
+                  Ready to Remove
+                </h4>
                 <p className="text-[11px] text-zinc-600 mt-2 leading-relaxed">
-                  Upload an image, choose a scenario, and click &quot;Remove Watermark&quot; to get started.
+                  Upload an image, choose a scenario, and click &quot;Remove
+                  Watermark&quot; to get started.
                 </p>
               </div>
             )}
