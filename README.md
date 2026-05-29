@@ -5,7 +5,7 @@
 **Tech stack:** Next.js 16 (App Router) · Prisma · PostgreSQL · NextAuth (Google OAuth) · Stripe · Tailwind CSS · MuAPI (gpt-image-2-image-to-image) · Webhook-backed async delivery  
 **Use cases:** Stock photo cleanup · Document digitization · Old photo restoration · Product image cleaning · Receipt & certificate processing
 
-![ClearMark AI Interface](https://placehold.co/1200x630/0f0f1a/818cf8?text=ClearMark+AI)
+![ClearMark AI Interface](https://cdn.muapi.ai/data/2/345929059902/Screenshot_2026-05-29_132025.png)
 
 ## 🌐 Project Details
 
