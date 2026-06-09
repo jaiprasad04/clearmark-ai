@@ -1,4 +1,5 @@
 const config = {
+  appName: "Clearmark Ai",
   auth: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID,
