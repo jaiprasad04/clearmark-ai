@@ -15,6 +15,8 @@
 
 > 🎨 **[Explore 50+ more open-source AI apps →](https://github.com/Anil-matcha/awesome-generative-ai-apps)**
 
+https://github.com/user-attachments/assets/0e9019c8-9a72-4d7e-8893-a45218dbeb52
+
 ## 🌐 Project Details
 
 **GitHub Repository:** [github.com/SamurAIGPT/clearmark-ai](https://github.com/SamurAIGPT/clearmark-ai)
